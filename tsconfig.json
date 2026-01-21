@@ -1,0 +1,3 @@
+{
+  "extends": "@epimnesis/config/tsconfig.base.json"
+}
