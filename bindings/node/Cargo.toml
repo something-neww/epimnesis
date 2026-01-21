@@ -11,7 +11,7 @@ napi        = "3.8.2"
 napi-derive = "3.5.1"
 
 # local dependencies
-engine = { path = "../engine" }
+engine = { path = "../../crates/engine" }
 
 [build-dependencies]
 napi-build = "2.3.1"
