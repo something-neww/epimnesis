@@ -1,0 +1,6 @@
+[workspace]
+members = ["crates/engine", "crates/node"]
+resolver = "2"
+
+[workspace.dependencies]
+engine = { path = "crates/engine" }

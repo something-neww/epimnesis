@@ -1,11 +1,8 @@
 # epimnesis
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack.
-
 ## Features
 
 - **TypeScript** - For type safety and improved developer experience
-- **Husky** - Git hooks for code quality
 - **Oxlint** - Oxlint + Oxfmt (linting & formatting)
 - **Turborepo** - Optimized monorepo build system
 

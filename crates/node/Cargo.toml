@@ -1,0 +1,21 @@
+[package]
+edition = "2024"
+name    = "node"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi        = "3.8.2"
+napi-derive = "3.5.1"
+
+# local dependencies
+engine = { path = "../engine" }
+
+[build-dependencies]
+napi-build = "2.3.1"
+
+[profile.release]
+lto   = true
+strip = "symbols"

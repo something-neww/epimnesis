@@ -1,5 +1,9 @@
 {
-  "plugins": ["unicorn", "typescript", "oxc"],
+  "plugins": [
+    "unicorn",
+    "typescript",
+    "oxc"
+  ],
   "categories": {},
   "rules": {
     "constructor-super": "warn",

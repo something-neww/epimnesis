@@ -1,4 +1,10 @@
 packages:
-  - "docs"
-  - "packages/*"
-  - "tooling/*"
+  - crates/node
+  - docs
+  - packages/*
+  - tooling/*
+
+catalog:
+  dotenv: ^17.2.3
+  typescript: ^5
+  zod: ^4.3.5
