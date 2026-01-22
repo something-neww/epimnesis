@@ -2,6 +2,7 @@ packages:
   - bindings/node
   - crates/engine
   - docs
+  - examples
   - packages/*
   - tooling/*
 
