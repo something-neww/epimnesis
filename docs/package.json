@@ -1,5 +1,5 @@
 {
-  "name": "fumadocs",
+  "name": "epimnesis/docs",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
     "postinstall": "fumadocs-mdx",
     "format": "oxfmt --write",
-    "lint": "oxlint ."
+    "lint": "oxlint . --type-aware"
   },
   "dependencies": {
     "fumadocs-core": "16.4.7",

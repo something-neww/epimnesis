@@ -1,4 +1,4 @@
-import { getLLMText, source } from "@/lib/source";
+import { getLLMText, source } from "@epimnesis/docs/lib/source";
 
 export const revalidate = false;
 

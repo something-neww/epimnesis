@@ -14,6 +14,11 @@
         "dist/**"
       ]
     },
+    "test": {
+      "dependsOn": [
+        "^test"
+      ]
+    },
     "format": {
       "dependsOn": [
         "^format"

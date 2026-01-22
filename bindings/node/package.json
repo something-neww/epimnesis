@@ -1,5 +1,5 @@
 {
-  "name": "node",
+  "name": "@epimnesis/node",
   "version": "1.0.0",
   "description": "Template project for writing node package with napi-rs",
   "keywords": [
@@ -30,11 +30,11 @@
     "artifacts": "napi artifacts",
     "build": "napi build --platform --release",
     "build:debug": "napi build --platform",
-    "format": "run-p format:oxfmt format:rs format:toml",
+    "format": "pnpm format:oxfmt && pnpm format:rs && pnpm format:toml",
     "format:oxfmt": "oxfmt --write",
     "format:toml": "taplo format",
     "format:rs": "cargo fmt",
-    "lint": "oxlint .",
+    "lint": "oxlint . --type-aware",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
     "preversion": "napi build --platform && git add .",

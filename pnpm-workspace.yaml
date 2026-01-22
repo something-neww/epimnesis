@@ -1,5 +1,6 @@
 packages:
-  - crates/node
+  - bindings/node
+  - crates/engine
   - docs
   - packages/*
   - tooling/*

@@ -1,14 +1,8 @@
-pub fn plus_100(input: u32) -> u32 {
-    input + 100
-}
+pub mod model;
+pub mod retrieve;
+mod utils;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = plus_100(2);
-        assert_eq!(result, 102);
-    }
-}
+pub use model::{MemoryLayer, MemoryRecord};
+pub use retrieve::{
+    MemoryCandidate, RetrieveOptions, ScoreBreakdown, retrieve_memory,
+};
