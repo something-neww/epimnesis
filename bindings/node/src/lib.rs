@@ -1,3 +1,7 @@
+// NOTE:
+// This is the stable Node FFI contract for Epimnesis.
+// Breaking changes require a major version bump.
+
 use engine::retrieve_memory;
 use napi_derive::napi;
 

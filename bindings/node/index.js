@@ -576,4 +576,6 @@ if (!nativeBinding) {
 }
 
 module.exports = nativeBinding
+module.exports.MemoryLayer = nativeBinding.MemoryLayer
+module.exports.MemoryLayerDto = nativeBinding.MemoryLayerDto
 module.exports.retrieve = nativeBinding.retrieve

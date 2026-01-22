@@ -6,9 +6,16 @@ export interface MemoryCandidate {
   score: ScoreBreakdown
 }
 
+export declare const enum MemoryLayer {
+  Working = 0,
+  Episodic = 1,
+  Semantic = 2,
+  Procedural = 3
+}
+
 export interface MemoryRecord {
   id: string
-  layer: string
+  layer: MemoryLayer
   content: string
   timestampMs: number
   metadata?: Record<string, string>

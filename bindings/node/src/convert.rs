@@ -5,12 +5,11 @@ impl TryFrom<MemoryRecordDto> for MemoryRecord {
     type Error = String;
 
     fn try_from(dto: MemoryRecordDto) -> Result<Self, Self::Error> {
-        let layer = match dto.layer.as_str() {
-            "working" => MemoryLayer::Working,
-            "episodic" => MemoryLayer::Episodic,
-            "semantic" => MemoryLayer::Semantic,
-            "procedural" => MemoryLayer::Procedural,
-            _ => return Err(format!("Unknown memory layer: {}", dto.layer)),
+        let layer = match dto.layer {
+            MemoryLayerDto::Working => MemoryLayer::Working,
+            MemoryLayerDto::Episodic => MemoryLayer::Episodic,
+            MemoryLayerDto::Semantic => MemoryLayer::Semantic,
+            MemoryLayerDto::Procedural => MemoryLayer::Procedural,
         };
 
         Ok(MemoryRecord {
@@ -36,10 +35,17 @@ impl From<ScoreBreakdown> for ScoreBreakdownDto {
 
 impl From<MemoryCandidate> for MemoryCandidateDto {
     fn from(c: MemoryCandidate) -> Self {
+        let layer = match c.record.layer {
+            MemoryLayer::Working => MemoryLayerDto::Working,
+            MemoryLayer::Episodic => MemoryLayerDto::Episodic,
+            MemoryLayer::Semantic => MemoryLayerDto::Semantic,
+            MemoryLayer::Procedural => MemoryLayerDto::Procedural,
+        };
+
         Self {
             record: MemoryRecordDto {
                 id: c.record.id,
-                layer: format!("{:?}", c.record.layer).to_lowercase(),
+                layer,
                 content: c.record.content,
                 timestamp_ms: c.record.timestamp_ms,
                 metadata: Some(c.record.metadata),

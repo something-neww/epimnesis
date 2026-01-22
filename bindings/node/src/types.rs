@@ -2,11 +2,18 @@ use napi_derive::napi;
 use std::collections::HashMap;
 
 // ---------- INPUT DTOs ----------
+#[napi(js_name = "MemoryLayer")]
+pub enum MemoryLayerDto {
+    Working,
+    Episodic,
+    Semantic,
+    Procedural,
+}
 
 #[napi(object, js_name = "MemoryRecord")]
 pub struct MemoryRecordDto {
     pub id: String,
-    pub layer: String, // JS-friendly
+    pub layer: MemoryLayerDto,
     pub content: String,
     pub timestamp_ms: i64,
     pub metadata: Option<HashMap<String, String>>,

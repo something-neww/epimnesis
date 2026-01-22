@@ -1,4 +1,4 @@
-pub mod model;
+mod model;
 pub mod retrieve;
 mod utils;
 
