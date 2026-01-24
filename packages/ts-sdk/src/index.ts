@@ -26,3 +26,4 @@ export function createEpimnesis(opts: { store: MemoryStore }) {
 }
 
 export * from "./types";
+export * from "./in-memory";

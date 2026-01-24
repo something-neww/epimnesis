@@ -9,6 +9,10 @@ import type {
 export interface MemoryStore {
   create(records: MemoryRecord[]): Promise<void>;
   update(records: MemoryRecord[]): Promise<void>;
+
+  createBatch(records: MemoryRecord[]): Promise<void>;
+  updateBatch(records: MemoryRecord[]): Promise<void>;
+
   delete(ids: string[]): Promise<void>;
   retrieve(layer: MemoryLayer, limit: number): Promise<MemoryRecord[]>;
 }
