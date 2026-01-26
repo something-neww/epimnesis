@@ -40,7 +40,7 @@ pub struct EpisodicPayload {
     pub event_time: i64,
 
     /// Optional duration
-    pub duration_ms: Option<i64>,
+    pub duration_ms: i64,
 }
 
 #[derive(Clone, Debug)]

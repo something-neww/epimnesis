@@ -6,13 +6,25 @@ use engine::memory::{
     ScoreReason, SemanticPayload, WorkingPayload,
 };
 
-fn parse_memory_kind(kind: &str) -> MemoryKind {
-    match kind {
-        "semantic" => MemoryKind::Semantic,
-        "episodic" => MemoryKind::Episodic,
-        "working" => MemoryKind::Working,
-        "procedural" => MemoryKind::Procedural,
-        _ => MemoryKind::Semantic, // safe default
+impl From<JsMemoryKind> for MemoryKind {
+    fn from(js: JsMemoryKind) -> Self {
+        match js {
+            JsMemoryKind::Semantic => MemoryKind::Semantic,
+            JsMemoryKind::Episodic => MemoryKind::Episodic,
+            JsMemoryKind::Working => MemoryKind::Working,
+            JsMemoryKind::Procedural => MemoryKind::Procedural,
+        }
+    }
+}
+
+impl From<MemoryKind> for JsMemoryKind {
+    fn from(kind: MemoryKind) -> Self {
+        match kind {
+            MemoryKind::Semantic => JsMemoryKind::Semantic,
+            MemoryKind::Episodic => JsMemoryKind::Episodic,
+            MemoryKind::Working => JsMemoryKind::Working,
+            MemoryKind::Procedural => JsMemoryKind::Procedural,
+        }
     }
 }
 
@@ -20,7 +32,7 @@ impl From<JsBaseMemory> for BaseMemory {
     fn from(js: JsBaseMemory) -> Self {
         BaseMemory {
             id: js.id,
-            kind: parse_memory_kind(&js.kind),
+            kind: js.kind.into(),
             content: js.content,
             created_at: js.created_at,
             last_accessed_at: Some(js.last_accessed_at),
@@ -42,7 +54,7 @@ impl From<JsEpisodicPayload> for EpisodicPayload {
     fn from(js: JsEpisodicPayload) -> Self {
         Self {
             event_time: js.event_time,
-            duration_ms: Some(js.duration_ms.unwrap_or(0)),
+            duration_ms: js.duration_ms.unwrap_or(0),
         }
     }
 }
@@ -95,27 +107,27 @@ impl From<ScoreReason> for JsScoreReason {
     fn from(r: ScoreReason) -> Self {
         match r {
             ScoreReason::SemanticSimilarity { score } => Self {
-                kind: "semantic".into(),
+                kind: JsScoreReasonKind::Semantic,
                 score: Some(score as f64),
                 trigger: None,
             },
             ScoreReason::Recency { score } => Self {
-                kind: "recency".into(),
+                kind: JsScoreReasonKind::Recency,
                 score: Some(score as f64),
                 trigger: None,
             },
             ScoreReason::WorkingPriority => Self {
-                kind: "working".into(),
+                kind: JsScoreReasonKind::Working,
                 score: None,
                 trigger: None,
             },
             ScoreReason::ProceduralMatch { trigger } => Self {
-                kind: "procedural".into(),
+                kind: JsScoreReasonKind::Procedural,
                 score: None,
                 trigger: Some(trigger),
             },
             ScoreReason::Importance { score } => Self {
-                kind: "importance".into(),
+                kind: JsScoreReasonKind::Importance,
                 score: Some(score as f64),
                 trigger: None,
             },
@@ -127,7 +139,7 @@ impl From<RetrievedMemory> for JsRetrievedMemory {
     fn from(m: RetrievedMemory) -> Self {
         Self {
             id: m.id,
-            kind: format!("{:?}", m.kind).to_lowercase(),
+            kind: m.kind.into(),
             score: m.score as f64,
             reasons: m.reasons.into_iter().map(Into::into).collect(),
         }
@@ -138,7 +150,7 @@ impl From<ExplainedMemory> for JsRetrievedMemory {
     fn from(m: ExplainedMemory) -> Self {
         Self {
             id: m.id,
-            kind: format!("{:?}", m.kind).to_lowercase(),
+            kind: m.kind.into(),
             score: m.score as f64,
             reasons: m.reasons.into_iter().map(Into::into).collect(),
         }

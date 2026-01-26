@@ -576,6 +576,7 @@ if (!nativeBinding) {
 }
 
 module.exports = nativeBinding
+module.exports.JsMemoryEngine = nativeBinding.JsMemoryEngine
+module.exports.JsScoreReasonKind = nativeBinding.JsScoreReasonKind
 module.exports.MemoryLayer = nativeBinding.MemoryLayer
-module.exports.MemoryLayerDto = nativeBinding.MemoryLayerDto
-module.exports.retrieve = nativeBinding.retrieve
+module.exports.JsMemoryKind = nativeBinding.JsMemoryKind

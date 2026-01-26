@@ -1,10 +1,27 @@
 use napi_derive::napi;
 use std::collections::HashMap;
 
+#[napi(js_name = "MemoryLayer")]
+pub enum JsMemoryKind {
+    Semantic,   // facts / knowledge
+    Episodic,   // events / experiences
+    Working,    // short-term context
+    Procedural, // skills / behaviors
+}
+
+#[napi]
+pub enum JsScoreReasonKind {
+    Semantic,
+    Recency,
+    Working,
+    Procedural,
+    Importance,
+}
+
 #[napi(object)]
 pub struct JsBaseMemory {
     pub id: String,
-    pub kind: String,
+    pub kind: JsMemoryKind,
 
     pub content: String,
     pub created_at: i64,
@@ -57,7 +74,7 @@ pub struct JsRetrieveInput {
 
 #[napi(object)]
 pub struct JsScoreReason {
-    pub kind: String,
+    pub kind: JsScoreReasonKind,
     pub score: Option<f64>,
     pub trigger: Option<String>,
 }
@@ -65,7 +82,7 @@ pub struct JsScoreReason {
 #[napi(object)]
 pub struct JsRetrievedMemory {
     pub id: String,
-    pub kind: String,
+    pub kind: JsMemoryKind,
     pub score: f64,
     pub reasons: Vec<JsScoreReason>,
 }
