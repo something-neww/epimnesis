@@ -1,17 +1,43 @@
-import { MemoryLayer } from "@epimnesis/node";
 import type {
-  MemoryCandidate,
-  MemoryRecord,
-  RetrieveOptions,
-  ScoreBreakdown,
+  JsBaseMemory,
+  MemoryKind,
+  JsSemanticPayload,
+  JsWorkingPayload,
+  JsEpisodicPayload,
+  JsProceduralPayload,
+  JsRetrievedMemory,
+  JsRetrievalExplanation,
+  JsScoreReason,
 } from "@epimnesis/node";
 
-export interface MemoryStore {
-  create(records: MemoryRecord[]): Promise<void>;
-  update(records: MemoryRecord[]): Promise<void>;
-  delete(ids: string[]): Promise<void>;
-  retrieve(layer: MemoryLayer, limit: number): Promise<MemoryRecord[]>;
+type BaseMemory = JsBaseMemory;
+
+export interface SemanticPayload extends BaseMemory {
+  kind: MemoryKind.Semantic;
+  embedding: JsSemanticPayload["embedding"];
 }
 
-export type { MemoryRecord, RetrieveOptions, MemoryCandidate, ScoreBreakdown };
-export { MemoryLayer };
+export interface WorkingPayload extends BaseMemory {
+  kind: MemoryKind.Working;
+  expiresAt: JsWorkingPayload["expiresAt"];
+  size: JsWorkingPayload["size"];
+}
+
+export interface EpisodicPayload extends BaseMemory {
+  kind: MemoryKind.Episodic;
+  durationMs: JsEpisodicPayload["durationMs"];
+  eventTime: JsEpisodicPayload["eventTime"];
+}
+
+export interface ProceduralPayload extends BaseMemory {
+  kind: MemoryKind.Procedural;
+  triggers: JsProceduralPayload["triggers"];
+  config: JsProceduralPayload["config"];
+  version: JsProceduralPayload["version"];
+}
+
+export type Candidate = SemanticPayload | WorkingPayload | EpisodicPayload | ProceduralPayload;
+
+export type RetrievedMemory = JsRetrievedMemory;
+export type RetrievalExplanation = JsRetrievalExplanation;
+export type ScoreReason = JsScoreReason;

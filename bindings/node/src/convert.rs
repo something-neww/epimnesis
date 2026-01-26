@@ -1,57 +1,168 @@
 use crate::types::*;
-use engine::{MemoryCandidate, MemoryLayer, MemoryRecord, ScoreBreakdown};
 
-impl TryFrom<MemoryRecordDto> for MemoryRecord {
-    type Error = String;
+use engine::memory::{
+    BaseMemory, CandidateMemory, EpisodicPayload, ExplainedMemory, MemoryKind,
+    ProceduralPayload, RetrievalExplanation, RetrieveInput, RetrievedMemory,
+    ScoreReason, SemanticPayload, WorkingPayload,
+};
 
-    fn try_from(dto: MemoryRecordDto) -> Result<Self, Self::Error> {
-        let layer = match dto.layer {
-            MemoryLayerDto::Working => MemoryLayer::Working,
-            MemoryLayerDto::Episodic => MemoryLayer::Episodic,
-            MemoryLayerDto::Semantic => MemoryLayer::Semantic,
-            MemoryLayerDto::Procedural => MemoryLayer::Procedural,
-        };
-
-        Ok(MemoryRecord {
-            id: dto.id,
-            layer,
-            content: dto.content,
-            timestamp_ms: dto.timestamp_ms,
-            source: None,
-            metadata: dto.metadata.unwrap_or_default(),
-        })
-    }
-}
-
-impl From<ScoreBreakdown> for ScoreBreakdownDto {
-    fn from(s: ScoreBreakdown) -> Self {
-        Self {
-            similarity: s.similarity as f64,
-            recency: s.recency as f64,
-            layer_weight: s.layer_weight as f64,
+impl From<JsMemoryKind> for MemoryKind {
+    fn from(js: JsMemoryKind) -> Self {
+        match js {
+            JsMemoryKind::Semantic => MemoryKind::Semantic,
+            JsMemoryKind::Episodic => MemoryKind::Episodic,
+            JsMemoryKind::Working => MemoryKind::Working,
+            JsMemoryKind::Procedural => MemoryKind::Procedural,
         }
     }
 }
 
-impl From<MemoryCandidate> for MemoryCandidateDto {
-    fn from(c: MemoryCandidate) -> Self {
-        let layer = match c.record.layer {
-            MemoryLayer::Working => MemoryLayerDto::Working,
-            MemoryLayer::Episodic => MemoryLayerDto::Episodic,
-            MemoryLayer::Semantic => MemoryLayerDto::Semantic,
-            MemoryLayer::Procedural => MemoryLayerDto::Procedural,
-        };
+impl From<MemoryKind> for JsMemoryKind {
+    fn from(kind: MemoryKind) -> Self {
+        match kind {
+            MemoryKind::Semantic => JsMemoryKind::Semantic,
+            MemoryKind::Episodic => JsMemoryKind::Episodic,
+            MemoryKind::Working => JsMemoryKind::Working,
+            MemoryKind::Procedural => JsMemoryKind::Procedural,
+        }
+    }
+}
 
+impl From<JsBaseMemory> for BaseMemory {
+    fn from(js: JsBaseMemory) -> Self {
+        BaseMemory {
+            id: js.id,
+            kind: js.kind.into(),
+            content: js.content,
+            created_at: js.created_at,
+            last_accessed_at: Some(js.last_accessed_at),
+            importance: js.importance as f32,
+            metadata: js.metadata.unwrap_or_default(),
+        }
+    }
+}
+
+impl From<JsSemanticPayload> for SemanticPayload {
+    fn from(js: JsSemanticPayload) -> Self {
         Self {
-            record: MemoryRecordDto {
-                id: c.record.id,
-                layer,
-                content: c.record.content,
-                timestamp_ms: c.record.timestamp_ms,
-                metadata: Some(c.record.metadata),
+            embedding: js.embedding.into_iter().map(|v| v as f32).collect(),
+        }
+    }
+}
+
+impl From<JsEpisodicPayload> for EpisodicPayload {
+    fn from(js: JsEpisodicPayload) -> Self {
+        Self {
+            event_time: js.event_time,
+            duration_ms: js.duration_ms.unwrap_or(0),
+        }
+    }
+}
+
+impl From<JsWorkingPayload> for WorkingPayload {
+    fn from(js: JsWorkingPayload) -> Self {
+        Self {
+            expires_at: js.expires_at,
+            size: js.size.unwrap_or(0) as usize,
+        }
+    }
+}
+
+impl From<JsProceduralPayload> for ProceduralPayload {
+    fn from(js: JsProceduralPayload) -> Self {
+        Self {
+            config: js.config.unwrap_or_default(),
+            version: js.version.unwrap_or_else(|| "v1".to_string()),
+            triggers: js.triggers,
+        }
+    }
+}
+
+impl From<JsCandidateMemory> for CandidateMemory {
+    fn from(js: JsCandidateMemory) -> Self {
+        CandidateMemory {
+            base: js.base.into(),
+            semantic: js.semantic.map(Into::into),
+            episodic: js.episodic.map(Into::into),
+            working: js.working.map(Into::into),
+            procedural: js.procedural.map(Into::into),
+        }
+    }
+}
+
+impl From<JsRetrieveInput> for RetrieveInput {
+    fn from(js: JsRetrieveInput) -> Self {
+        RetrieveInput {
+            query_embedding: js
+                .query_embedding
+                .map(|v| v.into_iter().map(|x| x as f32).collect()),
+            candidates: js.candidates.into_iter().map(Into::into).collect(),
+            limit: js.limit as usize,
+            now: js.now,
+        }
+    }
+}
+
+impl From<ScoreReason> for JsScoreReason {
+    fn from(r: ScoreReason) -> Self {
+        match r {
+            ScoreReason::SemanticSimilarity { score } => Self {
+                kind: JsScoreReasonKind::Semantic,
+                score: Some(score as f64),
+                trigger: None,
             },
-            confidence: c.confidence as f64,
-            score: c.score.into(),
+            ScoreReason::Recency { score } => Self {
+                kind: JsScoreReasonKind::Recency,
+                score: Some(score as f64),
+                trigger: None,
+            },
+            ScoreReason::WorkingPriority => Self {
+                kind: JsScoreReasonKind::Working,
+                score: None,
+                trigger: None,
+            },
+            ScoreReason::ProceduralMatch { trigger } => Self {
+                kind: JsScoreReasonKind::Procedural,
+                score: None,
+                trigger: Some(trigger),
+            },
+            ScoreReason::Importance { score } => Self {
+                kind: JsScoreReasonKind::Importance,
+                score: Some(score as f64),
+                trigger: None,
+            },
+        }
+    }
+}
+
+impl From<RetrievedMemory> for JsRetrievedMemory {
+    fn from(m: RetrievedMemory) -> Self {
+        Self {
+            id: m.id,
+            kind: m.kind.into(),
+            score: m.score as f64,
+            reasons: m.reasons.into_iter().map(Into::into).collect(),
+        }
+    }
+}
+
+impl From<ExplainedMemory> for JsRetrievedMemory {
+    fn from(m: ExplainedMemory) -> Self {
+        Self {
+            id: m.id,
+            kind: m.kind.into(),
+            score: m.score as f64,
+            reasons: m.reasons.into_iter().map(Into::into).collect(),
+        }
+    }
+}
+
+impl From<RetrievalExplanation> for JsRetrievalExplanation {
+    fn from(e: RetrievalExplanation) -> Self {
+        Self {
+            considered: e.considered as u32,
+            returned: e.returned as u32,
+            memories: e.memories.into_iter().map(Into::into).collect(),
         }
     }
 }
