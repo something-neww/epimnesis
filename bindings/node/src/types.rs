@@ -1,7 +1,7 @@
 use napi_derive::napi;
 use std::collections::HashMap;
 
-#[napi(js_name = "MemoryLayer")]
+#[napi(js_name = "MemoryKind", string_enum)]
 pub enum JsMemoryKind {
     Semantic,   // facts / knowledge
     Episodic,   // events / experiences
@@ -9,7 +9,7 @@ pub enum JsMemoryKind {
     Procedural, // skills / behaviors
 }
 
-#[napi]
+#[napi(js_name = "ScoreReasonKind", string_enum)]
 pub enum JsScoreReasonKind {
     Semantic,
     Recency,

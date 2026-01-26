@@ -3,26 +3,35 @@
  * Breaking changes require a major version bump.
  */
 
-import { retrieve as engineRetrieve, MemoryLayer } from "@epimnesis/node";
+import { JsMemoryEngine } from "@epimnesis/node";
+import { RetrieveMapper } from "./ffi";
+import type { Candidate } from "./types";
 
-import type { MemoryRecord, MemoryStore } from "./types";
+export class Epimnesis {
+  #engine: JsMemoryEngine;
 
-export function createEpimnesis(opts: { store: MemoryStore }) {
-  return {
-    async retrieve(query: string, layers: MemoryLayer[]) {
-      const candidates: MemoryRecord[] = [];
+  constructor() {
+    this.#engine = new JsMemoryEngine();
+  }
 
-      for (const layer of layers) {
-        const layerRecords = await opts.store.retrieve(layer, 50);
-        candidates.push(...layerRecords);
-      }
+  retrieve(input: {
+    queryEmbedding?: number[];
+    candidates: Candidate[];
+    limit?: number;
+    now?: number;
+  }) {
+    return this.#engine.retrieve(RetrieveMapper.toJsInput(input));
+  }
 
-      return engineRetrieve(query, candidates, {
-        topK: 10,
-        minScore: 0,
-      });
-    },
-  };
+  recall(input: {
+    queryEmbedding?: number[];
+    candidates: Candidate[];
+    limit?: number;
+    now?: number;
+  }) {
+    return this.#engine.explain(RetrieveMapper.toJsInput(input));
+  }
 }
 
-export * from "./types";
+export type { ScoreReason, RetrievedMemory, RetrievalExplanation } from "./types";
+export type { ScoreReasonKind, MemoryKind } from "@epimnesis/node";
