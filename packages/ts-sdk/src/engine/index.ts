@@ -3,6 +3,12 @@
  * Ported from Rust engine, pure TypeScript implementation
  */
 
+import {
+  cosineSimilarity,
+  computeRecency,
+  matchesTrigger,
+  getPayload,
+} from "./scoring.js";
 import type {
   RetrievedMemory,
   RetrievalExplanation,
@@ -11,12 +17,6 @@ import type {
   ScoreReason,
 } from "./types.js";
 import { defaultWeights, MemoryKind } from "./types.js";
-import {
-  cosineSimilarity,
-  computeRecency,
-  matchesTrigger,
-  getPayload,
-} from "./scoring.js";
 export { MemoryKind, type Candidate } from "./types.js";
 
 export class MemoryEngine {

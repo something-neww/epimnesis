@@ -1,11 +1,11 @@
 import { describe, test, expect } from "vitest";
 
+import { MemoryEngine } from "../engine";
 import {
-  MemoryEngine,
   MemoryKind,
   type Candidate,
   type RetrieveInput,
-} from "../engine/index.js";
+} from "../engine/types";
 
 function semantic(id: string, embedding: number[]): Candidate {
   return {

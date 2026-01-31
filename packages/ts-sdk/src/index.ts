@@ -1,4 +1,4 @@
-export { MemoryEngine, createEngine } from "./engine/index.js";
+export { MemoryEngine } from "./engine/index";
 export type {
   Candidate,
   RetrievedMemory,
@@ -12,4 +12,4 @@ export type {
   ProceduralPayload,
   RetrieveInput,
 } from "./engine/types.js";
-export { defaultWeights, type Weights } from "./engine/types.js";
+export { defaultWeights, type Weights } from "./engine/types";

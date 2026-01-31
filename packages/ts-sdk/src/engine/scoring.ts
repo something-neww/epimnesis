@@ -2,7 +2,7 @@
  * Scoring algorithms - ported from Rust engine
  */
 
-import type { Candidate, ProceduralPayload } from "./types.js";
+import type { Candidate, ProceduralPayload } from "./types";
 
 const HALF_LIFE_MS = 24 * 60 * 60 * 1000;
 

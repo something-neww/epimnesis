@@ -36,9 +36,6 @@ lerna-debug.log*
 # Turbo
 .turbo
 
-# Better-T-Stack
-.alchemy
-
 # Testing
 coverage
 .nyc_output
@@ -52,3 +49,5 @@ temp
 # Added by cargo
 
 /target
+.opencode
+.sisyphus
