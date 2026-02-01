@@ -5,6 +5,9 @@ go 1.25.6
 require go.uber.org/fx v1.24.0
 
 require (
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
+	github.com/jackc/pgx/v5 v5.7.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/pgvector/pgvector-go v0.3.0 // indirect
 	github.com/puzpuzpuz/xsync/v3 v3.5.1 // indirect
