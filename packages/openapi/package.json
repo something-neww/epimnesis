@@ -1,0 +1,9 @@
+{
+  "name": "@epimnesis/openapi",
+  "version": "0.0.0",
+  "description": "",
+  "files": [
+    "openapi.json"
+  ],
+  "type": "module"
+}

@@ -11,3 +11,7 @@ dist-ssr
 server/dist
 public/dist
 .turbo
+
+# Ignore go.work.sum to avoid merge conflicts, 
+# but keep go.work so the workspace is defined.
+go.work.sum

@@ -1,0 +1,26 @@
+{
+  "name": "@epimnesis/core",
+  "version": "0.0.0",
+  "description": "",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "format": "oxfmt --write",
+    "lint": "oxlint . --type-aware"
+  },
+  "devDependencies": {
+    "tsdown": "^0.18.1",
+    "typescript": "^5.9.3"
+  }
+}
