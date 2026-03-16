@@ -17,9 +17,9 @@ type Config struct {
 	EmbeddingDimension int `env:"EMBEDDING_DIMENSION" envDefault:"1536"`
 }
 
-func Load() *Config {
+func Load() Config {
 	// Use your preferred env loader (e.g., envconfig, viper)
-	return &Config{
+	return Config{
 		VectorStore:        getEnv("VECTOR_STORE", "pgvector"),
 		DatabaseURL:        getEnv("DATABASE_URL", ""),
 		QdrantURL:          getEnv("QDRANT_URL", "http://localhost:6334"),

@@ -16,7 +16,7 @@ var Module = fx.Options(
 
 // newVectorStore is the Factory.
 // It is the ONLY function exported from this package that returns the Store interface.
-func newVectorStore(cfg *config.Config) (Store, error) {
+func newVectorStore(cfg config.Config) (Store, error) {
 	var store Store
 
 	switch cfg.VectorStore {

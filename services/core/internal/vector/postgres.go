@@ -12,12 +12,12 @@ import (
 
 type PostgresStore struct {
 	db  *bun.DB
-	cfg *config.Config
+	cfg config.Config
 }
 
 // NewPostgresStore creates the implementation.
 // It is NOT exported (lowercase) so it can't be used outside this package directly.
-func newPostgresStore(cfg *config.Config) Store {
+func newPostgresStore(cfg config.Config) Store {
 	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(cfg.DatabaseURL)))
 	return &PostgresStore{
 		db:  bun.NewDB(sqldb, pgdialect.New()),

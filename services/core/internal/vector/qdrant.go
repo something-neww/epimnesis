@@ -9,10 +9,10 @@ import (
 
 type QdrantStore struct {
 	client *qdrant.Client
-	cfg    *config.Config
+	cfg    config.Config
 }
 
-func newQdrantStore(cfg *config.Config) Store {
+func newQdrantStore(cfg config.Config) Store {
 	client, _ := qdrant.NewClient(&qdrant.Config{Host: cfg.QdrantURL})
 	return &QdrantStore{client: client, cfg: cfg}
 }
